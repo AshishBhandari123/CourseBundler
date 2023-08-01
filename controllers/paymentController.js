@@ -40,10 +40,8 @@ export const paymentVerification = catchAsyncError(async (req, res, next) => {
 
   const subscription_id = user.subscription.id;
 
-  const generated_signature = crypto_createHmac(
-    "sha256",
-    process.env.RAZORPAY_API_SECRET
-  )
+  const generated_signature = crypto
+    .createHmac("sha256", process.env.RAZORPAY_API_SECRET)
     .update(razorpay_payment_id + "|" + subscription_id, "utf-8")
     .digest("hex");
 
@@ -91,7 +89,7 @@ export const cancelSubscription = catchAsyncError(async (req, res, next) => {
 
   const refundTime = process.env.REFUND_DAYS * 24 * 60 * 60 * 1000;
 
-  if(refundTime > gap) {
+  if (refundTime > gap) {
     await instance.payments.refund(payment.razorpay_payment_id);
     refund = true;
   }
@@ -103,8 +101,8 @@ export const cancelSubscription = catchAsyncError(async (req, res, next) => {
 
   res.status(200).json({
     success: true,
-    message: 
-    refund? "Subscription cancelled, You will receive full refund within 7 days."
-    :"Subscription cancelled,No refund initiated as subscription cancelled after 7 days.",
+    message: refund
+      ? "Subscription cancelled, You will receive full refund within 7 days."
+      : "Subscription cancelled,No refund initiated as subscription cancelled after 7 days.",
   });
 });

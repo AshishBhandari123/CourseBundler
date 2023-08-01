@@ -2,7 +2,8 @@ import mongoose from "mongoose";
 import validator from "validator";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
-import crypto from "crypto";
+import * as crypto from "crypto";
+// import crypto from "crypto";
 
 const schema = new mongoose.Schema({
   name: {
